@@ -2,7 +2,6 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('accounts_edit',account_id=a.id) }}">
-    <input value = {{ a.id }} type="hidden" name="account_id">
     <table>
         <tr>
             <td> 
