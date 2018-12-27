@@ -1,14 +1,15 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('accounts_create') }}">
+<form method="POST" action="{{ url_for('accounts_edit',account_id=a.id) }}">
+    <input value = {{ a.id }} type="hidden" name="account_id">
     <table>
         <tr>
-            <td>
+            <td> 
                 {{ form.username.label }}
             </td>
             <td>
-                {{ form.username }}
+                {{ form.username(value=a.username) }}
             </td>
             <td>
                 <ul>
@@ -28,7 +29,7 @@
         </tr>
         <tr>
             <td colspan="2">
-            <input type="submit" value="Add user"/>
+            <input type="submit" value="Update"/>
         </td>
     </tr>
 </form>

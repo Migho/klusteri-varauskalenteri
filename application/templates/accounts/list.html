@@ -6,9 +6,14 @@
       <th>username</th>
     </tr>
     {% for account in accounts %}
-    <tr>
-      <td>{{ account.username }}</td>
-    </tr>
+      <tr>
+        <td>{{ account.username }}</td>
+      </tr>
+      <td>
+        <form method="POST" action="{{ url_for('accounts_edit', account_id=account.id) }}">
+          <input type="submit" value="Edit"/>
+        </form>
+      </td>
     {% endfor %}
   </table>
 {% endblock %}

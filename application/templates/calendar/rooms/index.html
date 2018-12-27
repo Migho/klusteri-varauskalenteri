@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <ul>
+        <li><a href="{{ url_for('rooms_new') }}">Add room</a></li>
+        <li><a href="{{ url_for('rooms_list') }}">List and edit rooms</a></li>
+    </ul>
+    
+{% endblock %}

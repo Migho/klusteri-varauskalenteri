@@ -1,0 +1,20 @@
+{% extends "accounts/index.html" %}
+
+{% block body %}
+  <table>
+    <tr>
+      <th>Name</th>
+    </tr>
+    <tr>
+      <th>Description</th>
+    </tr>
+    {% for room in rooms %}
+    <tr>
+      <td>{{ room.name }}</td>
+    </tr>
+    <tr>
+      <td>{{ room.description }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
