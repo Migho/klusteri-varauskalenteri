@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm
 from wtforms import PasswordField, StringField, validators
  
 class AddAccountForm(FlaskForm):
-    username = StringField("Username for new user", [validators.InputRequired()])
+    username = StringField("Username for new user (must be unique)", [validators.InputRequired()])
     password = PasswordField("Password for new user", [validators.InputRequired()])
 
     class Meta:

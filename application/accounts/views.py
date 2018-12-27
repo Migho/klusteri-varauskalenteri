@@ -1,4 +1,4 @@
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from flask_login import login_user
   
 from application import db, app, login_required
@@ -32,8 +32,8 @@ def accounts_create():
     try:
         db.session().commit()
     except IntegrityError:  # Unique constaint error?
+        flash('Username is not unique !')
         db.session.rollback()
-        # TODO something clever
         return render_template("accounts/new.html", form = form)
     return redirect(url_for("accounts_index"))
 

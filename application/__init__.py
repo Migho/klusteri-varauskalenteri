@@ -59,6 +59,7 @@ from application import views
 
 from application.auth import views
 from application.accounts import views
+#from application.calendar.rooms import views
 from application.accounts import models
 from application.calendar.events import models
 from application.calendar.rooms import models
