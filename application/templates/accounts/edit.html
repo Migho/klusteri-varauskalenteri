@@ -27,6 +27,14 @@
             </td>
         </tr>
         <tr>
+            <td>
+                {{ form.hidden.label }}
+            </td>
+            <td>
+                {{ form.hidden(checked=a.hidden) }}
+            </td>
+        </tr>
+        <tr>
             <td colspan="2">
             <input type="submit" value="Update"/>
         </td>

@@ -47,9 +47,15 @@ def accounts_edit(account_id):
             return redirect(url_for("accounts_edit"))
         a = Account.query.get(account_id)
         a.username = form.username.data
-        if form.password.data is not None:
+        a.hidden = form.hidden.data
+        if form.password.data is not "":
             a.password = form.password.data
-        db.session().commit()
+        try:
+            db.session().commit()
+        except IntegrityError:  # Unique constaint error?
+            flash('Username is not unique !')
+            db.session.rollback()
+            return redirect(url_for("accounts_edit"))
         return redirect(url_for("accounts_index"))
     else:
         return render_template("accounts/edit.html", form = EditAccountForm(), a = Account.query.get(account_id))

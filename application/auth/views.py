@@ -11,10 +11,9 @@ def auth_login():
         return render_template("auth/loginform.html", form = LoginForm())
 
     form = LoginForm(request.form)
-    # mahdolliset validoinnit
 
     account = Account.query.filter_by(username=form.username.data, password=form.password.data).first()
-    if not account:
+    if not account or account.hidden is True:
         return render_template("auth/loginform.html", form = form, error = "No such username or password")
 
 
