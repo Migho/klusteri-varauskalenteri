@@ -7,6 +7,7 @@ class Account(Base):
     username = db.Column(db.String(144), unique=True, nullable=False)
     password = db.Column(db.String(144), nullable=False)
     admin = db.Column(db.Boolean(), server_default="0")
+    hidden = db.Column(db.Boolean(), server_default="0")
     events = db.relationship('Event', backref='creator')
     
     def __init__(self, username, password):
