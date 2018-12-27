@@ -1,19 +1,19 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('rooms_create') }}">
+<form method="POST" action="{{ url_for('rooms_edit',room_id=r.id) }}">
     <table>
         <tr>
-            <td>
+            <td> 
                 {{ form.name.label }}
             </td>
             <td>
-                {{ form.name }}
+                {{ form.name(value=r.name) }}
             </td>
             <td>
                 <ul>
                     {% for error in form.name.errors %}
-                    <li>{{ error }}</li>
+                        <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
@@ -23,12 +23,20 @@
                 {{ form.description.label }}
             </td>
             <td>
-                {{ form.description }}
+                {{ form.description(value=r.description) }}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {{ form.hidden.label }}
+            </td>
+            <td>
+                {{ form.hidden(checked=r.hidden) }}
             </td>
         </tr>
         <tr>
             <td colspan="2">
-            <input type="submit" value="Add room"/>
+            <input type="submit" value="Update"/>
         </td>
     </tr>
 </form>
