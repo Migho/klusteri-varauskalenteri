@@ -1,0 +1,9 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <ul>
+        <li><a href="{{ url_for('events_new') }}">Add event</a></li>
+        <li><a href="{{ url_for('events_list') }}">List and edit events</a></li>
+    </ul>
+    
+{% endblock %}

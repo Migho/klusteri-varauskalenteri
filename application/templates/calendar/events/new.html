@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<form method="POST" action="{{ url_for('events_create') }}">
+    <table>
+        <tr>
+            <td>
+                {{ form.name.label }}
+            </td>
+            <td>
+                {{ form.name }}
+            </td>
+            <td>
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td>{{ form.startTime.label }}</td>
+            <td>{{ form.startTime }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.endTime.label }}</td>
+            <td>{{ form.endTime }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.responsible.label }}</td>
+            <td>{{ form.responsible }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.description.label }}</td>
+            <td>{{ form.description }}</td>
+        </tr>
+        
+
+
+        {% for room in rooms %}
+            <tr>
+                <td>{{ room.name }} <input name="roomsBooked" type="checkbox" value="{{room.id}}"> </td>
+                <td>{{ form.privateReserve.label }} <input name="privateReserve" type="checkbox" value="{{room.id}}"> </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2">
+            <input type="submit" value="Add event"/>
+        </td>
+    </tr>
+</form>
+
+{% endblock %}

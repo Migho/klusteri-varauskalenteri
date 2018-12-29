@@ -55,15 +55,16 @@ def login_required(role="ANY"):
     return wrapper
 
 # Load application content
-from application import views
-
-from application.auth import views
-from application.accounts import views
-from application.calendar.rooms import views
 from application.accounts import models
 from application.calendar.events import models
 from application.calendar.rooms import models
 from application.calendar.event_room import models
+
+from application import views
+from application.auth import views
+from application.accounts import views
+from application.calendar.rooms import views
+from application.calendar.events import views
 
 # Login functionality 2
 from application.accounts.models import Account
