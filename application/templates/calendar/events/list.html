@@ -4,14 +4,28 @@
   <table>
     <tr>
       <th>Name</th>
+      <th>Starting time</th>
+      <th>Ending time</th>
+      <th>Responsible</th>
+      <th>Description</th>
       <th>Edit</th>
+      <th>Delete</th>
     </tr>
     {% for event in events %}
       <tr>
         <td>{{ event.name }}</td>
+        <td>{{ event.startTime }}</td>
+        <td>{{ event.endTime }}</td>
+        <td>{{ event.responsible }}</td>
+        <td>{{ event.description }}</td>
         <td>
           <form method="POST" action="{{ url_for('events_edit', event_id=event.id) }}">
             <input type="submit" value="Edit"/>
+          </form>
+        </td>
+        <td>
+          <form method="POST" action="{{ url_for('events_delete', event_id=event.id) }}">
+            <input type="submit" value="Delete"/>
           </form>
         </td>
       </tr>

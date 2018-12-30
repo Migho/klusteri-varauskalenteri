@@ -12,7 +12,7 @@ from sqlalchemy.exc import IntegrityError
 def events_index():
     return render_template("calendar/events/index.html", events = Event.query.all())
 
-@app.route("/calendar/events/list.html", methods=["GET"])
+@app.route("/calendar/events/list.html", methods=['GET'])
 def events_list():
     return render_template("calendar/events/list.html", events = Event.query.all())
 
@@ -42,6 +42,16 @@ def events_create():
         db.session.rollback()
         return render_template("calendar/events/new.html", form = form)
     return redirect(url_for("events_index"))
+
+@app.route('/calendar/events/<event_id>/delete', methods = ['POST'])
+@login_required()
+def events_delete(event_id):
+    EventRoom.query.filter_by(event_id=event_id).delete()
+    Event.query.filter_by(id=event_id).delete()
+    db.session().commit()
+    return redirect(url_for("events_index"))
+
+
 
 @app.route('/calendar/events/<event_id>', methods = ['GET','POST'])
 @login_required()
