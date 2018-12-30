@@ -17,26 +17,27 @@ def events_list():
     return render_template("calendar/events/list.html", events = Event.query.all())
 
 @app.route("/calendar/events/new/")
-#@login_required()
+@login_required()
 def events_new():
     return render_template("calendar/events/new.html", form = EventForm(), rooms = Room.query.all())
 
 
 @app.route("/calendar/events/", methods=["POST"])
-#@login_required()
+@login_required()
 def events_create():
     form = EventForm(request.form)
     if not form.validate():
+        flash('Validation error: please check all fields')
         return render_template("calendar/events/new.html", form = form, rooms = Room.query.all())
     e = Event(form.name.data, form.startTime.data, form.endTime.data, form.responsible.data, form.description.data, current_user.id)
     db.session().add(e)
     db.session.flush()
     for roomId in form.roomsBooked.data:
-        er = EventRoom(roomId, e.id, 0)
+        er = EventRoom(e.id, roomId, 0)
         db.session().add(er)
     try:
         db.session().commit()
-    except IntegrityError:  # Unique constaint error?
+    except IntegrityError:
         flash('There is something wrong ! Please check the form !')
         db.session.rollback()
         return render_template("calendar/events/new.html", form = form)
@@ -45,19 +46,20 @@ def events_create():
 @app.route('/calendar/events/<event_id>', methods = ['GET','POST'])
 @login_required()
 def events_edit(event_id):
-    form = EventForm(request.form)
     if request.method == "POST" and form.validate():
         form = EventForm(request.form)
         if not form.validate():
+            flash('Validation error: please check all fields')
             return redirect(url_for("events_edit"))
         r = Event.query.get(event_id)
         r.name = form.name.data
-        r.hidden = form.hidden.data
-        r.description = form.description.data
+        r.startTime = form.startTime.data
+        r.endTime = form.endTime.data
+
         try:
             db.session().commit()
-        except IntegrityError:  # Unique constaint error?
-            flash('Username is not unique !')
+        except IntegrityError:
+            flash('There is something wrong ! Please check the form !')
             db.session.rollback()
             return redirect(url_for("events_edit"))
         return redirect(url_for("events_index"))

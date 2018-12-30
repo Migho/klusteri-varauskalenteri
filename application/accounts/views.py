@@ -40,7 +40,6 @@ def accounts_create():
 @app.route('/accounts/<account_id>', methods = ['GET','POST'])
 @login_required(role="SUPERADMIN")
 def accounts_edit(account_id):
-    form = EditAccountForm(request.form)
     if request.method == "POST" and form.validate():
         form = EditAccountForm(request.form)
         if not form.validate():

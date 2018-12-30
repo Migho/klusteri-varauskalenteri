@@ -10,7 +10,7 @@ class Event(Base):
     responsible = db.Column(db.String(50))
     description = db.Column(db.Text)
     accountId = db.Column(db.Integer, db.ForeignKey('account.id'))
-    events = db.relationship('Room', secondary='event_room')
+    rooms = db.relationship('Room', secondary='event_room')
 
     def __init__(self, name, startTime, endTime, responsible, description, accountId):
         self.name = name
