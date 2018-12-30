@@ -18,7 +18,6 @@ def events_list():
         form = EventForm(request.form)
         if form.roomsBooked.data is not None:
             events = Event.query.join((EventRoom, Event.id==EventRoom.event_id)).filter(EventRoom.room_id.in_((form.roomsBooked.data))).all()
-            print("FDAFADFADFDAFADAFFADFADFAFAAAAA", events)
             return render_template("calendar/events/list.html", events=events, rooms = Room.query.all())
     return render_template("calendar/events/list.html", events = Event.query.all(), rooms = Room.query.all())
 
@@ -52,10 +51,14 @@ def events_create():
 @app.route('/calendar/events/<event_id>/delete', methods = ['POST'])
 @login_required()
 def events_delete(event_id):
+    e = Event.query.get(event_id)
+    if e.accountId != current_user.id and 'ADMIN' not in current_user.roles():
+        flash("You are not authorized to remove others events.")
+        return redirect(url_for("events_list"))
     EventRoom.query.filter_by(event_id=event_id).delete()
     Event.query.filter_by(id=event_id).delete()
     db.session().commit()
-    return redirect(url_for("events_index"))
+    return redirect(url_for("events_list"))
 
 
 
