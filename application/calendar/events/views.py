@@ -65,18 +65,25 @@ def events_delete(event_id):
 @app.route('/calendar/events/<event_id>', methods = ['GET','POST'])
 @login_required()
 def events_edit(event_id):
+    e = Event.query.get(event_id)
+    if e.accountId != current_user.id and 'ADMIN' not in current_user.roles():
+        flash("You are not authorized to remove others events.")
+        return redirect(url_for("events_list"))
     form = EventForm(request.form)
     if request.method == "POST" and form.validate():
         if not form.validate():
             flash('Validation error: please check all fields')
             return redirect(url_for("events_edit"))
-        e = Event.query.get(event_id)
         e.name = form.name.data
         e.startTime = form.startTime.data
         e.endTime = form.endTime.data
         e.desctiption = form.description.data
         e.responsible = form.responsible.data
         e.accountId = current_user.id # TODO use the original user ID
+        EventRoom.query.filter_by(event_id=event_id).delete()
+        for roomId in form.roomsBooked.data:
+            er = EventRoom(e.id, roomId, 0)
+            db.session().add(er)
         try:
             db.session().commit()
         except IntegrityError:
