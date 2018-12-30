@@ -12,9 +12,15 @@ from sqlalchemy.exc import IntegrityError
 def events_index():
     return render_template("calendar/events/index.html", events = Event.query.all())
 
-@app.route("/calendar/events/list.html", methods=['GET'])
+@app.route("/calendar/events/list.html", methods=['GET', 'POST'])
 def events_list():
-    return render_template("calendar/events/list.html", events = Event.query.all())
+    if request.method == "POST":
+        form = EventForm(request.form)
+        if form.roomsBooked.data is not None:
+            events = Event.query.join((EventRoom, Event.id==EventRoom.event_id)).filter(EventRoom.room_id.in_((form.roomsBooked.data))).all()
+            print("FDAFADFADFDAFADAFFADFADFAFAAAAA", events)
+            return render_template("calendar/events/list.html", events=events, rooms = Room.query.all())
+    return render_template("calendar/events/list.html", events = Event.query.all(), rooms = Room.query.all())
 
 @app.route("/calendar/events/new/")
 @login_required()

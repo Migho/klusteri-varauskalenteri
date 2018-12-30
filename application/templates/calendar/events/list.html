@@ -1,6 +1,16 @@
 {% extends "layout.html" %}
 
 {% block body %}
+  <form method="POST" action="{{ url_for('events_list') }}">
+    {% for room in rooms %}
+      <tr>
+        <td>{{ room.name }} <input name="roomsBooked" type="checkbox" value="{{room.id}}" checked> </td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td colspan="2"><input type="submit" value="Filter events"/></td>
+    </tr>
+  </form>
   <table>
     <tr>
       <th>Name</th>
