@@ -42,9 +42,6 @@ def rooms_create():
 def rooms_edit(room_id):
     form = EditRoomForm(request.form)
     if request.method == "POST" and form.validate():
-        form = EditRoomForm(request.form)
-        if not form.validate():
-            return redirect(url_for("rooms_edit"))
         r = Room.query.get(room_id)
         r.name = form.name.data
         r.hidden = form.hidden.data

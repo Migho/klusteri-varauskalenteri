@@ -7,7 +7,8 @@ from sqlalchemy.sql import text
 from application import db
 
 def TimeNotOverlapping(form, field):
-    print("Field data: ", field.data)
+    if form.data.get('startTime') is None or form.data.get('endTime') is None:
+        raise ValidationError('Check the dates')
     startTime = form.data.get('startTime').strftime("%Y-%m-%d %H:%M:%S")
     endTime = form.data.get('endTime').strftime("%Y-%m-%d, %H:%M:%S")
     print("start:", startTime, "end:", endTime)

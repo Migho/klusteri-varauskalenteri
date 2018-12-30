@@ -46,16 +46,18 @@ def events_create():
 @app.route('/calendar/events/<event_id>', methods = ['GET','POST'])
 @login_required()
 def events_edit(event_id):
+    form = EventForm(request.form)
     if request.method == "POST" and form.validate():
-        form = EventForm(request.form)
         if not form.validate():
             flash('Validation error: please check all fields')
             return redirect(url_for("events_edit"))
-        r = Event.query.get(event_id)
-        r.name = form.name.data
-        r.startTime = form.startTime.data
-        r.endTime = form.endTime.data
-
+        e = Event.query.get(event_id)
+        e.name = form.name.data
+        e.startTime = form.startTime.data
+        e.endTime = form.endTime.data
+        e.desctiption = form.description.data
+        e.responsible = form.responsible.data
+        e.accountId = current_user.id # TODO use the original user ID
         try:
             db.session().commit()
         except IntegrityError:
@@ -64,4 +66,4 @@ def events_edit(event_id):
             return redirect(url_for("events_edit"))
         return redirect(url_for("events_index"))
     else:
-        return render_template("calendar/events/edit.html", form = EventForm(), r = Event.query.get(event_id))
+        return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())

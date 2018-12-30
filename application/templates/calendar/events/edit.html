@@ -1,44 +1,50 @@
 {% extends "layout.html" %}
 
 {% block body %}
-<form method="POST" action="{{ url_for('events_edit',event_id=r.id) }}">
+<form method="POST" action="{{ url_for('events_edit',event_id=e.id) }}">
     <table>
         <tr>
-            <td> 
+            <td>
                 {{ form.name.label }}
             </td>
             <td>
-                {{ form.name(value=r.name) }}
+                {{ form.name(value=e.name) }}
             </td>
             <td>
                 <ul>
                     {% for error in form.name.errors %}
-                        <li>{{ error }}</li>
+                    <li>{{ error }}</li>
                     {% endfor %}
                 </ul>
             </td>
         </tr>
         <tr>
-            <td>
-                {{ form.description.label }}
-            </td>
-            <td>
-                {{ form.description(value=r.description) }}
-            </td>
+            <td>{{ form.startTime.label }}</td>
+            <td>{{ form.startTime(value=e.startTime) }}</td>
         </tr>
         <tr>
-            <td>
-                {{ form.hidden.label }}
-            </td>
-            <td>
-                {{ form.hidden(checked=r.hidden) }}
-            </td>
+            <td>{{ form.endTime.label }}</td>
+            <td>{{ form.endTime(value=e.endTime) }}</td>
         </tr>
         <tr>
-            <td colspan="2">
-            <input type="submit" value="Update"/>
-        </td>
-    </tr>
+            <td>{{ form.responsible.label }}</td>
+            <td>{{ form.responsible(value=e.responsible) }}</td>
+        </tr>
+        <tr>
+            <td>{{ form.description.label }}</td>
+            <td>{{ form.description(value=e.description) }}</td>
+        </tr>
+        
+        {% for room in rooms %}
+            <tr>
+                <td>{{ room.name }} <input name="roomsBooked" type="checkbox" value="{{room.id}}"> </td>
+                <td>{{ form.privateReserve.label }} <input name="privateReserve" type="checkbox" value="{{room.id}}"> </td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="2"><input type="submit" value="Add event"/></td>
+        </tr>
+    </table>
 </form>
 
 {% endblock %}
