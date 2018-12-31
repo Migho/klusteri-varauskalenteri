@@ -4,7 +4,7 @@ from application.models import Base
 class Event(Base):
 
     __tablename__ = "event"
-    name = db.Column(db.String(50), unique=True, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
     startTime = db.Column(db.DateTime, nullable=False)
     endTime = db.Column(db.DateTime, nullable=False)
     responsible = db.Column(db.String(50))

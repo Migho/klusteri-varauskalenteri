@@ -13,11 +13,11 @@ def TimeNotOverlapping(form, field):
     endTime = form.data.get('endTime').strftime("%Y-%m-%d, %H:%M:%S")
     for roomId in field.data:
         statement = text("SELECT * FROM Event INNER JOIN event_room ON event.id = event_room.event_id" +
-                " WHERE ('" + startTime + "' BETWEEN event.startTime AND event.endTime" +
-                " OR '" + endTime + "' BETWEEN event.startTime AND event.endTime" +
-                " OR event.startTime BETWEEN '" + startTime + "' AND '" + endTime + "'" +
-                " OR event.endTime BETWEEN '" + startTime + "' AND '" + endTime + "'" +
-                " OR event.startTime = '" + startTime + "' OR event.endTime = '" + endTime + "')" +
+                " WHERE ('" + startTime + "' BETWEEN 'event.startTime' AND 'event.endTime'" +
+                " OR '" + endTime + "' BETWEEN 'event.startTime' AND 'event.endTime'" +
+                " OR 'event.startTime' BETWEEN '" + startTime + "' AND '" + endTime + "'" +
+                " OR 'event.endTime' BETWEEN '" + startTime + "' AND '" + endTime + "'" +
+                " OR 'event.startTime' = '" + startTime + "' OR 'event.endTime' = '" + endTime + "')" +
                 " AND event_room.room_id = " + roomId)
         result = db.engine.execute(statement)
         if result.first() is not None:
