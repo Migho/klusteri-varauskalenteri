@@ -74,7 +74,7 @@ def events_edit(event_id):
     form = EventForm(request.form)
     if request.method == "POST":
         if not form.validate():
-            # There a major problem right here:
+            # Theres a major problem right here:
             # validating fails because old event_rooms are existing
             # when trying to edit the event. The event id should somehow
             # be delivered to the custom validator, so the event_rooms by
