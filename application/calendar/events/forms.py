@@ -11,15 +11,14 @@ def TimeNotOverlapping(form, field):
         raise ValidationError('Check the dates')
     startTime = form.data.get('startTime').strftime("%Y-%m-%d %H:%M:%S")
     endTime = form.data.get('endTime').strftime("%Y-%m-%d, %H:%M:%S")
-    print("start:", startTime, "end:", endTime)
     for roomId in field.data:
-        statement = text(("SELECT * FROM Event INNER JOIN event_room ON event.id = event_room.event_id" +
+        statement = text("SELECT * FROM Event INNER JOIN event_room ON event.id = event_room.event_id" +
                 " WHERE ('" + startTime + "' BETWEEN startTime AND endTime" +
                 " OR '" + endTime + "' BETWEEN startTime AND endTime" +
                 " OR startTime BETWEEN '" + startTime + "' AND '" + endTime + "'" +
                 " OR endTime BETWEEN '" + startTime + "' AND '" + endTime + "'" +
                 " OR startTime = '" + startTime + "' OR endTime = '" + endTime + "')" +
-                " AND event_room.room_id = " + roomId))
+                " AND event_room.room_id = " + roomId)
         result = db.engine.execute(statement)
         if result.first() is not None:
             print("Found overlapping when creating the event :(")
@@ -28,7 +27,7 @@ def TimeNotOverlapping(form, field):
             print("Did not find any overlappings")
  
 class EventForm(FlaskForm):
-    name = StringField("Event name (must be unique)", [validators.InputRequired()])
+    name = StringField("Event name", [validators.InputRequired()])
     startTime = DateTimeField("Event starting time YYYY-mm-dd HH:MM:SS",
             validators=[DateRange(datetime.datetime.today(), datetime.datetime.today() + datetime.timedelta(days=365))])
     endTime = DateTimeField("Event ending time YYYY-mm-dd HH:MM:SS",

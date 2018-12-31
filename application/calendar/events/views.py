@@ -38,7 +38,10 @@ def events_create():
     db.session().add(e)
     db.session.flush()
     for roomId in form.roomsBooked.data:
-        er = EventRoom(e.id, roomId, 0)
+        if roomId in form.privateReserve.data:
+            er = EventRoom(e.id, roomId, 1)
+        else:
+            er = EventRoom(e.id, roomId, 0)
         db.session().add(er)
     try:
         db.session().commit()
@@ -61,7 +64,6 @@ def events_delete(event_id):
     return redirect(url_for("events_list"))
 
 
-
 @app.route('/calendar/events/<event_id>', methods = ['GET','POST'])
 @login_required()
 def events_edit(event_id):
@@ -70,26 +72,37 @@ def events_edit(event_id):
         flash("You are not authorized to remove others events.")
         return redirect(url_for("events_list"))
     form = EventForm(request.form)
-    if request.method == "POST" and form.validate():
+    if request.method == "POST":
         if not form.validate():
+            # There a major problem right here:
+            # validating fails because old event_rooms are existing
+            # when trying to edit the event. The event id should somehow
+            # be delivered to the custom validator, so the event_rooms by
+            # this specific event can be filtered out. Otherwise this works
+            # great, but in order to edit the field the user must disable all
+            # the rooms, save, and re-enable the ones he want. It's easier to
+            # just delete and create a new one.
+            # TODO: pass the ID to the validator and filter out own event_rooms
             flash('Validation error: please check all fields')
-            return redirect(url_for("events_edit"))
+            return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())
         e.name = form.name.data
         e.startTime = form.startTime.data
         e.endTime = form.endTime.data
         e.desctiption = form.description.data
         e.responsible = form.responsible.data
         e.accountId = current_user.id # TODO use the original user ID
-        EventRoom.query.filter_by(event_id=event_id).delete()
         for roomId in form.roomsBooked.data:
-            er = EventRoom(e.id, roomId, 0)
+            if roomId in form.privateReserve.data:
+                er = EventRoom(e.id, roomId, 1)
+            else:
+                er = EventRoom(e.id, roomId, 0)
             db.session().add(er)
         try:
             db.session().commit()
         except IntegrityError:
             flash('There is something wrong ! Please check the form !')
             db.session.rollback()
-            return redirect(url_for("events_edit"))
+            return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())
         return redirect(url_for("events_index"))
     else:
         return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())
