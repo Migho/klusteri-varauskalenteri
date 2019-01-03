@@ -2,6 +2,11 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('events_create') }}">
+    {% for field, errors in form.errors.items() %}
+        <div class="alert alert-error">
+            {{ form[field].label }}: {{ ', '.join(errors) }}
+        </div>
+    {% endfor %}
     <table>
         <tr>
             <td>

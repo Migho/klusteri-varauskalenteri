@@ -10,7 +10,7 @@ from flask import request
 def TimeNotOverlapping():
     def _TimeNotOverlapping(form, field):
         if form.data.get('startTime') is None or form.data.get('endTime') is None:
-            raise ValidationError('Check the dates')
+            raise ValidationError('There is something wrong with the dates, couldnt check if room available')
         startTime = form.data.get('startTime').strftime("%Y-%m-%d %H:%M:%S")
         endTime = form.data.get('endTime').strftime("%Y-%m-%d, %H:%M:%S")
         for roomId in field.data:

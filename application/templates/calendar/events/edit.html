@@ -2,6 +2,11 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('events_edit',event_id=e.id) }}">
+    {% for field, errors in form.errors.items() %}
+        <div class="alert alert-error">
+            {{ form[field].label }}: {{ ', '.join(errors) }}
+        </div>
+    {% endfor %}
     <input type="hidden" name="event_id" value="{{e.id}}">
     <table>
         <tr>
