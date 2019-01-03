@@ -81,7 +81,7 @@ def events_edit(event_id):
         e.name = form.name.data
         e.startTime = form.startTime.data
         e.endTime = form.endTime.data
-        e.desctiption = form.description.data
+        e.description = form.description.data
         e.responsible = form.responsible.data
         e.accountId = current_user.id # TODO use the original user ID
         for roomId in form.roomsBooked.data:
