@@ -45,6 +45,5 @@ Käytännössä käyttäjiä ja huoneita ei tässä käyttötapauksessa tule lis
 * Parempi GUI
 * Järkevämpi varauskalenterin tarkastelu (kts. Matlun nykyinen varauskalenteri)
 * Parempi viestintä silloin kun onnistutaan tai epäonnistutaan
-* Tapahtumien editointi - application/calendar/events/views.py -tiedostosta löytyy mikä vielä puuttuu
-* Linkkien piilotus
+* Linkkien piilotus silloin kun oikeutta ei niitä kuitenkaan ole tarkastella
 * Muuta startDate ja endDate -> start_date ja end_date =)
