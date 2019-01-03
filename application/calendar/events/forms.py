@@ -23,7 +23,7 @@ def TimeNotOverlapping():
                     " OR '" + end_time + "' BETWEEN event.start_time AND event.end_time" +
                     " OR event.start_time BETWEEN '" + start_time + "' AND '" + end_time + "'" +
                     " OR event.end_time BETWEEN '" + start_time + "' AND '" + end_time + "'" +
-                    " OR event.start_time = '" + start_time + "' OR 'event.end_time = '" + end_time + "')" +
+                    " OR event.start_time = '" + start_time + "' OR event.end_time = '" + end_time + "')" +
                     " AND event_room.room_id = " + roomId + ownEventRoomsStatement)
             
             result = db.engine.execute(statement)
