@@ -34,7 +34,7 @@ def events_create():
     if not form.validate():
         flash('Validation error: please check all fields')
         return render_template("calendar/events/new.html", form = form, rooms = Room.query.all())
-    e = Event(form.name.data, form.startTime.data, form.endTime.data, form.responsible.data, form.description.data, current_user.id)
+    e = Event(form.name.data, form.start_time.data, form.end_time.data, form.responsible.data, form.description.data, current_user.id)
     db.session().add(e)
     db.session.flush()
     for roomId in form.roomsBooked.data:
@@ -79,8 +79,8 @@ def events_edit(event_id):
         EventRoom.query.filter_by(event_id=event_id).delete()
         e.id = form.event_id.data
         e.name = form.name.data
-        e.startTime = form.startTime.data
-        e.endTime = form.endTime.data
+        e.start_time = form.start_time.data
+        e.end_time = form.end_time.data
         e.description = form.description.data
         e.responsible = form.responsible.data
         e.accountId = current_user.id # TODO use the original user ID

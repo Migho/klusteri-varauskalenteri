@@ -9,21 +9,21 @@ from flask import request
 
 def TimeNotOverlapping():
     def _TimeNotOverlapping(form, field):
-        if form.data.get('startTime') is None or form.data.get('endTime') is None:
+        if form.data.get('start_time') is None or form.data.get('end_time') is None:
             raise ValidationError('There is something wrong with the dates, couldnt check if room available')
-        startTime = form.data.get('startTime').strftime("%Y-%m-%d %H:%M:%S")
-        endTime = form.data.get('endTime').strftime("%Y-%m-%d %H:%M:%S")
+        start_time = form.data.get('start_time').strftime("%Y-%m-%d %H:%M:%S")
+        end_time = form.data.get('end_time').strftime("%Y-%m-%d %H:%M:%S")
         for roomId in field.data:
             if form.data.get('event_id') is not None:
                 ownEventRoomsStatement = " AND event_room.event_id != " + str(form.data.get('event_id'))
             else:
                 ownEventRoomsStatement = ""
             statement = text("SELECT * FROM Event INNER JOIN event_room ON event.id = event_room.event_id" +
-                    " WHERE ('" + startTime + "' BETWEEN 'event.startTime' AND 'event.endTime'" +
-                    " OR '" + endTime + "' BETWEEN 'event.startTime' AND 'event.endTime'" +
-                    " OR 'event.startTime' BETWEEN '" + startTime + "' AND '" + endTime + "'" +
-                    " OR 'event.endTime' BETWEEN '" + startTime + "' AND '" + endTime + "'" +
-                    " OR 'event.startTime' = '" + startTime + "' OR 'event.endTime' = '" + endTime + "')" +
+                    " WHERE ('" + start_time + "' BETWEEN event.start_time AND event.end_time" +
+                    " OR '" + end_time + "' BETWEEN event.start_time AND event.end_time" +
+                    " OR event.start_time BETWEEN '" + start_time + "' AND '" + end_time + "'" +
+                    " OR event.end_time BETWEEN '" + start_time + "' AND '" + end_time + "'" +
+                    " OR event.start_time = '" + start_time + "' OR 'event.end_time = '" + end_time + "')" +
                     " AND event_room.room_id = " + roomId + ownEventRoomsStatement)
             
             result = db.engine.execute(statement)
@@ -38,9 +38,9 @@ class EventForm(FlaskForm):
 
     event_id = IntegerField()
     name = StringField("Event name", [validators.InputRequired()])
-    startTime = DateTimeField("Event starting time YYYY-mm-dd HH:MM:SS",
+    start_time = DateTimeField("Event starting time YYYY-mm-dd HH:MM:SS",
             validators=[DateRange(datetime.datetime.today(), datetime.datetime.today() + datetime.timedelta(days=365))])
-    endTime = DateTimeField("Event ending time YYYY-mm-dd HH:MM:SS",
+    end_time = DateTimeField("Event ending time YYYY-mm-dd HH:MM:SS",
             validators=[DateRange(datetime.datetime.today(), datetime.datetime.today() + datetime.timedelta(days=365))])
     responsible = StringField("Responsible person", [validators.InputRequired()])
     description = StringField("Description for the event")
