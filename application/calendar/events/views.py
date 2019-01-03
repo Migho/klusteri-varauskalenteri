@@ -74,17 +74,10 @@ def events_edit(event_id):
     form = EventForm(request.form)
     if request.method == "POST":
         if not form.validate():
-            # Theres a major problem right here:
-            # validating fails because old event_rooms are existing
-            # when trying to edit the event. The event id should somehow
-            # be delivered to the custom validator, so the event_rooms by
-            # this specific event can be filtered out. Otherwise this works
-            # great, but in order to edit the field the user must disable all
-            # the rooms, save, and re-enable the ones he want. It's easier to
-            # just delete and create a new one.
-            # TODO: pass the ID to the validator and filter out own event_rooms
             flash('Validation error: please check all fields')
             return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())
+        EventRoom.query.filter_by(event_id=event_id).delete()
+        e.id = form.event_id.data
         e.name = form.name.data
         e.startTime = form.startTime.data
         e.endTime = form.endTime.data

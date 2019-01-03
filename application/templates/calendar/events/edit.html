@@ -2,6 +2,7 @@
 
 {% block body %}
 <form method="POST" action="{{ url_for('events_edit',event_id=e.id) }}">
+    <input type="hidden" name="event_id" value="{{e.id}}">
     <table>
         <tr>
             <td>

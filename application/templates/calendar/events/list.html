@@ -18,7 +18,7 @@
       <th>Ending time</th>
       <th>Responsible</th>
       <th>Description</th>
-<!--      <th>Edit</th>-->
+      <th>Edit</th>
       <th>Delete</th>
     </tr>
     {% for event in events %}
@@ -28,11 +28,11 @@
         <td>{{ event.endTime }}</td>
         <td>{{ event.responsible }}</td>
         <td>{{ event.description }}</td>
-<!--        <td>
+        <td>
           <form method="POST" action="{{ url_for('events_edit', event_id=event.id) }}">
             <input type="submit" value="Edit"/>
           </form>
-        </td>-->
+        </td>
         <td>
           <form method="POST" action="{{ url_for('events_delete', event_id=event.id) }}">
             <input type="submit" value="Delete"/>
