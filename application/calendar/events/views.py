@@ -67,6 +67,21 @@ def events_delete(event_id):
 @app.route('/calendar/events/<event_id>', methods = ['GET','POST'])
 @login_required()
 def events_edit(event_id):
+    def get_booked_rooms():
+        rooms = Room.query.all()
+        for room in rooms:
+            eventRoom = EventRoom.query.filter_by(event_id=event_id).filter_by(room_id=room.id).first()
+            if eventRoom is not None:
+                room.booked = "checked"
+                if eventRoom.privateEvent is True:
+                    room.private = "checked"
+                else:
+                    room.private = ""
+            else:
+                room.booked = ""
+                room.private = ""
+        return rooms
+
     e = Event.query.get(event_id)
     if e.accountId != current_user.id and 'ADMIN' not in current_user.roles():
         flash("You are not authorized to remove others events.")
@@ -75,7 +90,7 @@ def events_edit(event_id):
     if request.method == "POST":
         if not form.validate():
             flash('Validation error: please check all fields')
-            return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())
+            return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = get_booked_rooms())
         EventRoom.query.filter_by(event_id=event_id).delete()
         e.id = form.event_id.data
         e.name = form.name.data
@@ -95,7 +110,7 @@ def events_edit(event_id):
         except IntegrityError:
             flash('There is something wrong ! Please check the form !')
             db.session.rollback()
-            return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())
+            return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = get_booked_rooms())
         return redirect(url_for("events_index"))
     else:
-        return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = Room.query.all())
+        return render_template("calendar/events/edit.html", form = EventForm(), e = Event.query.get(event_id), rooms = get_booked_rooms())

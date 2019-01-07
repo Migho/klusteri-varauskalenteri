@@ -43,8 +43,8 @@
         
         {% for room in rooms %}
             <tr>
-                <td>{{ room.name }} <input name="roomsBooked" type="checkbox" value="{{room.id}}"> </td>
-                <td>{{ form.privateReserve.label }} <input name="privateReserve" type="checkbox" value="{{room.id}}"> </td>
+                <td>{{ room.name }} <input name="roomsBooked" type="checkbox" value="{{room.id}}" {{room.booked}}> </td>
+                <td>{{ form.privateReserve.label }} <input name="privateReserve" type="checkbox" value="{{room.id}}" {{room.private}}> </td>
             </tr>
         {% endfor %}
         <tr>
