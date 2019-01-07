@@ -30,20 +30,22 @@ Huonetaulu sisältää huoneet tai tilat joita varauskalenterin kautta on tarkoi
 
 Event_Room yhdistää tapahtumat ja huoneet. Kun tapahtuma luodaan, kaikille varatuille huoneille luodaan tähän tauluun uusi rivi.
 
-## Roolit
+## Roolit ja käyttötapaukset
 
 Järjestelmässä ei ole muita rooleja kuin admin, rekisteröity käyttäjä sekä rekisteröimätön käyttäjä.
 
-* Varauskalenteri on kaikille julkinen
-* Rekisteröity käyttäjä voi lisätä ja poistaa tapahtumia
+* Varauskalenteri on kaikille julkinen ja sitä voi tarkastella ilman kirjautumista
+* Rekisteröity käyttäjä voi lisätä tapahtumia sekä poistaa ja muokata omia tapahtumiaan
 * Admin-käyttäjä voi lisätä, poistaa ja muokata tapahtumia, käyttäjiä sekä huoneita.
 
 Käytännössä käyttäjiä ja huoneita ei tässä käyttötapauksessa tule lisää, mutta on mukavaa ettei niitä silti tarvitse tehdä kantaa ronklaamalla.
 
 ## TODO-list
 
-* Parempi GUI
-* Järkevämpi varauskalenterin tarkastelu (kts. Matlun nykyinen varauskalenteri)
-* Parempi viestintä silloin kun onnistutaan tai epäonnistutaan
-* Linkkien piilotus silloin kun oikeutta ei niitä kuitenkaan ole tarkastella
-* Muuta startDate ja endDate -> start_date ja end_date =)
+* Parempi GUI:
+    * Järkevämpi varauskalenterin tarkastelu (kts. Matlun nykyinen varauskalenteri)
+        * Lisää filttereitä, esim listauksessa oletuksena vain tulevaisuudessa tapahtuvat tapahtumat
+        * Taulu jossa kuukausinäkymä voisi olla järkevämpi, kuten nykyisessä kalenterissa
+    * Linkkien piilotus silloin kun oikeuksia ei ole
+    * Vähemmän turhauttava ohjaus ja käyttö (esimerkiksi tapahtuman luonti voisi palata suoraan listaukseen jne)
+* Huoneiden oikea poisto?
