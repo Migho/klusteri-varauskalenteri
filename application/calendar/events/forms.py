@@ -7,6 +7,16 @@ from sqlalchemy.sql import text
 from application import db
 from flask import request
 
+class SelectMultipleFieldWithRoomChoices(SelectMultipleField):
+    # The original SelectMultipleField required choices to be specified in the attributes,
+    # which caused the events with new rooms chosen to fail.
+    def pre_validate(self, form):
+        if self.data:
+            choices=[(str(r.id)) for r in Room.query.all()]
+            for d in self.data:
+                if d not in choices:
+                    raise ValueError(self.gettext("'%(value)s' is not a valid choice for this field") % dict(value=d))
+
 def TimeNotOverlapping():
     def _TimeNotOverlapping(form, field):
         if form.data.get('start_time') is None or form.data.get('end_time') is None:
@@ -45,9 +55,12 @@ class EventForm(FlaskForm):
     responsible = StringField("Responsible person", [validators.InputRequired()])
     description = StringField("Description for the event")
 
-    roomsBooked = SelectMultipleField(choices=[(str(r.id)) for r in Room.query.all()], 
-            validators=[TimeNotOverlapping()])
-    privateReserve = SelectMultipleField("Private reserve", choices=[(str(r.id)) for r in Room.query.all()])
+    roomsBooked = SelectMultipleFieldWithRoomChoices(validators=[TimeNotOverlapping(), validators.InputRequired()])
+    privateReserve = SelectMultipleFieldWithRoomChoices("Private reserve")
+
+    def printChoises(self):
+        choices=[(str(r.id)) for r in Room.query.all()]
+        print("CHOISES ARE", choices)
 
     class Meta:
         csrf = False
