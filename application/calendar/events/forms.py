@@ -28,6 +28,7 @@ def TimeNotOverlapping():
                 ownEventRoomsStatement = " AND event_room.event_id != " + str(form.data.get('event_id'))
             else:
                 ownEventRoomsStatement = ""
+            # In a nutshell: check if any time is between any other time period, or exactly the same
             statement = text("SELECT * FROM Event INNER JOIN event_room ON event.id = event_room.event_id" +
                     " WHERE ('" + start_time + "' BETWEEN event.start_time AND event.end_time" +
                     " OR '" + end_time + "' BETWEEN event.start_time AND event.end_time" +
@@ -45,7 +46,6 @@ def TimeNotOverlapping():
     return _TimeNotOverlapping
  
 class EventForm(FlaskForm):
-
     event_id = IntegerField()
     name = StringField("Event name", [validators.InputRequired()])
     start_time = DateTimeField("Event starting time YYYY-mm-dd HH:MM:SS",
@@ -57,10 +57,6 @@ class EventForm(FlaskForm):
 
     roomsBooked = SelectMultipleFieldWithRoomChoices(validators=[TimeNotOverlapping(), validators.InputRequired()])
     privateReserve = SelectMultipleFieldWithRoomChoices("Private reserve")
-
-    def printChoises(self):
-        choices=[(str(r.id)) for r in Room.query.all()]
-        print("CHOISES ARE", choices)
 
     class Meta:
         csrf = False
