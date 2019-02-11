@@ -15,5 +15,4 @@ Tadaa!
 
 ## Dokumentaatio
 
-Dokumentaatio löytyy [täältä](documentation/dokumentaatio.md).
-Tsohan [arvostelutärpit](documentation/tsoha.md).
+[Linkki dokumentaatioon](documentation/dokumentaatio.md).
